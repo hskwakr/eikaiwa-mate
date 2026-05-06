@@ -1,26 +1,139 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* フォント: design.md §3 / design-impl.md §7 */
+  --font-sans-en: var(--font-sans-en);
+  --font-sans-jp: var(--font-sans-jp);
+  --font-serif-en: var(--font-serif-en);
+  --font-serif-jp: var(--font-serif-jp);
+  --font-sans: var(--font-sans-en);
+  --font-heading: var(--font-serif-en);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Eikaiwa Mate 拡張トークン (design.md §3) */
+  --color-you: var(--you);
+  --color-you-soft: var(--you-soft);
+  --color-mate: var(--mate);
+  --color-mate-soft: var(--mate-soft);
+  --color-orb-warm: var(--orb-warm);
+  --color-orb-cool: var(--orb-cool);
+  --color-orb-glow: var(--orb-glow);
+
+  /* radius: design.md §3 直値 (sm/md/lg/pill) + shadcn calc (xl+) */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* shadcn standard — design.md §3 確定値 (Light テーマ) */
+  --background: oklch(98% 0.012 50);
+  --foreground: oklch(22% 0.020 50);
+
+  --card: oklch(99% 0.005 50);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+
+  --primary: oklch(50% 0.130 35);
+  --primary-foreground: oklch(99% 0.005 50);
+
+  --secondary: oklch(94% 0.022 35);
+  --secondary-foreground: oklch(50% 0.050 230);
+
+  --muted: oklch(96% 0.018 35);
+  --muted-foreground: oklch(45% 0.025 50);
+
+  --accent: oklch(70% 0.130 35);
+  --accent-foreground: oklch(32% 0.100 35);
+
+  --destructive: oklch(58% 0.22 27);
+  --destructive-foreground: oklch(99% 0 0);
+
+  --border: oklch(80% 0.020 50);
+  --input: oklch(85% 0.020 50);
+  --ring: var(--primary);
+
+  --radius: 16px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* Eikaiwa Mate 拡張トークン (design.md §3) */
+  --you: oklch(60% 0.10 230);
+  --you-soft: oklch(92% 0.03 230);
+  --mate: oklch(65% 0.13 35);
+  --mate-soft: oklch(93% 0.04 35);
+
+  --orb-warm: oklch(72% 0.10 35);
+  --orb-cool: oklch(72% 0.09 230);
+  --orb-glow: oklch(82% 0.12 75);
+}
+
+.dark {
+  /* MVP では未使用(凍結 = 構造温存)。Phase 2 でダーク追加時の出発点 */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Phase 2 でアニメ追加時に停止規則をここに (design-impl.md §8) */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }
