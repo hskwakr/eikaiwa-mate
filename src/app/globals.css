@@ -7,9 +7,15 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+
+  /* フォント: design.md §3 / design-impl.md §7 */
+  --font-sans-en: var(--font-sans-en);
+  --font-sans-jp: var(--font-sans-jp);
+  --font-serif-en: var(--font-serif-en);
+  --font-serif-jp: var(--font-serif-jp);
+  --font-sans: var(--font-sans-en);
+  --font-heading: var(--font-serif-en);
+
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
