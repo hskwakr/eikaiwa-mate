@@ -2,6 +2,7 @@ import OpenAI from "openai";
 
 const REALTIME_MODEL = "gpt-realtime-mini";
 const REALTIME_VOICE = "coral";
+const INPUT_TRANSCRIPTION_MODEL = "gpt-4o-mini-transcribe";
 const SECRET_TTL_SECONDS = 60;
 
 export interface IssuedClientSecret {
@@ -18,7 +19,12 @@ export async function issueOpenAIClientSecret(
     session: {
       type: "realtime",
       model: REALTIME_MODEL,
-      audio: { output: { voice: REALTIME_VOICE } },
+      audio: {
+        input: {
+          transcription: { model: INPUT_TRANSCRIPTION_MODEL },
+        },
+        output: { voice: REALTIME_VOICE },
+      },
     },
   });
 
