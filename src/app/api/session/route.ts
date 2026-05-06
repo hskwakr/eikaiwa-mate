@@ -1,14 +1,24 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import { issueOpenAIClientSecret } from "@/lib/realtime/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const REALTIME_MODEL = "gpt-realtime-mini";
-const REALTIME_VOICE = "coral";
-const SECRET_TTL_SECONDS = 60;
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  const configured = process.env.APP_ORIGIN;
+  if (configured) return origin === configured;
+  return (
+    process.env.NODE_ENV !== "production" &&
+    origin === "http://localhost:3000"
+  );
+}
 
-export async function POST() {
+export async function POST(request: Request) {
+  if (!isAllowedOrigin(request.headers.get("origin"))) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
@@ -17,26 +27,9 @@ export async function POST() {
     );
   }
 
-  const client = new OpenAI({ apiKey });
-
   try {
-    const clientSecret = await client.realtime.clientSecrets.create({
-      expires_after: {
-        anchor: "created_at",
-        seconds: SECRET_TTL_SECONDS,
-      },
-      session: {
-        type: "realtime",
-        model: REALTIME_MODEL,
-        audio: {
-          output: {
-            voice: REALTIME_VOICE,
-          },
-        },
-      },
-    });
-
-    return NextResponse.json(clientSecret);
+    const secret = await issueOpenAIClientSecret(apiKey);
+    return NextResponse.json(secret);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("[/api/session] failed to create client secret:", message);
