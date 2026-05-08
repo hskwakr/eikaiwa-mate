@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import type { TranscriptTurn } from "@/lib/realtime";
 import { SubtitleBubble } from "./SubtitleBubble";
 
 interface SubtitleListProps {
   turns: TranscriptTurn[];
-  emptyHint?: string;
+  emptyHint?: ReactNode;
 }
 
 export function SubtitleList({
