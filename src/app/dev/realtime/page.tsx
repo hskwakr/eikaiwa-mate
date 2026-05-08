@@ -1,14 +1,7 @@
 "use client";
 
-import { useRealtimeSession, type SessionState } from "@/lib/realtime";
-
-const STATE_LABEL: Record<SessionState, string> = {
-  idle: "Idle",
-  connecting: "Connecting…",
-  listening: "Listening",
-  speaking: "Speaking",
-  error: "Error",
-};
+import { useRealtimeSession } from "@/lib/realtime";
+import { STATE_LABEL } from "@/components/state-badge/StateBadge";
 
 export default function RealtimeDevPage() {
   const {
@@ -17,15 +10,14 @@ export default function RealtimeDevPage() {
     error,
     micEnabled,
     busy,
+    connected,
+    connectDisabled,
+    disconnectDisabled,
     audioRef,
     connect,
     disconnect,
     toggleMic,
   } = useRealtimeSession();
-
-  const connected = state === "listening" || state === "speaking";
-  const disconnectDisabled =
-    busy || (!connected && state !== "connecting" && state !== "error");
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-6 py-12">
@@ -59,7 +51,7 @@ export default function RealtimeDevPage() {
         <button
           type="button"
           onClick={connect}
-          disabled={busy || connected || state === "connecting"}
+          disabled={connectDisabled}
           className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-50"
         >
           Connect

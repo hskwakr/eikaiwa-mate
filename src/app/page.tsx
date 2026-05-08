@@ -13,13 +13,14 @@ export default function Home() {
     error,
     micEnabled,
     busy,
+    connected,
+    connectDisabled,
+    disconnectDisabled,
     audioRef,
     connect,
     disconnect,
     toggleMic,
   } = useRealtimeSession();
-
-  const connected = state === "listening" || state === "speaking";
 
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
@@ -62,6 +63,8 @@ export default function Home() {
           <SessionControl
             state={state}
             busy={busy}
+            connectDisabled={connectDisabled}
+            disconnectDisabled={disconnectDisabled}
             onConnect={connect}
             onDisconnect={disconnect}
           />

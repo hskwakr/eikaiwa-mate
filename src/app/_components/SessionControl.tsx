@@ -6,6 +6,8 @@ import type { SessionState } from "@/lib/realtime";
 interface SessionControlProps {
   state: SessionState;
   busy: boolean;
+  connectDisabled: boolean;
+  disconnectDisabled: boolean;
   onConnect: () => void;
   onDisconnect: () => void;
 }
@@ -13,14 +15,13 @@ interface SessionControlProps {
 export function SessionControl({
   state,
   busy,
+  connectDisabled,
+  disconnectDisabled,
   onConnect,
   onDisconnect,
 }: SessionControlProps) {
-  const connected = state === "listening" || state === "speaking";
-  const showDisconnect = connected || state === "connecting";
-  const connectDisabled = busy || connected || state === "connecting";
-  const disconnectDisabled =
-    busy || (!connected && state !== "connecting" && state !== "error");
+  const showDisconnect =
+    state === "listening" || state === "speaking" || state === "connecting";
 
   if (showDisconnect) {
     return (

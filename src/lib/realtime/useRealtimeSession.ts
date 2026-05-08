@@ -40,6 +40,9 @@ export interface UseRealtimeSessionResult {
   error: RealtimeError | null;
   micEnabled: boolean;
   busy: boolean;
+  connected: boolean;
+  connectDisabled: boolean;
+  disconnectDisabled: boolean;
   audioRef: React.RefObject<HTMLAudioElement | null>;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
@@ -127,12 +130,20 @@ export function useRealtimeSession(
     };
   }, []);
 
+  const connected = state === "listening" || state === "speaking";
+  const connectDisabled = busy || connected || state === "connecting";
+  const disconnectDisabled =
+    busy || (!connected && state !== "connecting" && state !== "error");
+
   return {
     state,
     turns,
     error,
     micEnabled,
     busy,
+    connected,
+    connectDisabled,
+    disconnectDisabled,
     audioRef,
     connect,
     disconnect,

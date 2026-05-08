@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { SessionState } from "@/lib/realtime";
 
-const STATE_LABEL: Record<SessionState, string> = {
+export const STATE_LABEL: Record<SessionState, string> = {
   idle: "Idle",
   connecting: "Connecting…",
   listening: "Listening",
