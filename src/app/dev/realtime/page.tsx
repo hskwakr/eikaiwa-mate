@@ -1,123 +1,23 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  createRealtimeAdapter,
-  type RealtimeError,
-  type RealtimeSession,
-  type SessionState,
-  type TranscriptTurn,
-} from "@/lib/realtime";
-
-interface SessionTokenResponse {
-  value: string;
-  expiresAt: number;
-}
-
-async function fetchEphemeralToken(): Promise<string> {
-  const res = await fetch("/api/session", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  });
-  if (!res.ok) {
-    throw new Error(`/api/session failed: ${res.status} ${res.statusText}`);
-  }
-  const body = (await res.json()) as Partial<SessionTokenResponse>;
-  if (typeof body.value !== "string") {
-    throw new Error("/api/session response missing 'value'");
-  }
-  return body.value;
-}
-
-const STATE_LABEL: Record<SessionState, string> = {
-  idle: "Idle",
-  connecting: "Connecting…",
-  listening: "Listening",
-  speaking: "Speaking",
-  error: "Error",
-};
+import { useRealtimeSession } from "@/lib/realtime";
+import { STATE_LABEL } from "@/components/state-badge/StateBadge";
 
 export default function RealtimeDevPage() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const sessionRef = useRef<RealtimeSession | null>(null);
-  const [state, setState] = useState<SessionState>("idle");
-  const [micEnabled, setMicEnabled] = useState(true);
-  const [error, setError] = useState<RealtimeError | null>(null);
-  const [turns, setTurns] = useState<TranscriptTurn[]>([]);
-  const [busy, setBusy] = useState(false);
-
-  const upsertTurn = useCallback((turn: TranscriptTurn) => {
-    setTurns((prev) => {
-      const idx = prev.findIndex((t) => t.id === turn.id);
-      if (idx === -1) return [...prev, turn];
-      const next = prev.slice();
-      next[idx] = turn;
-      return next;
-    });
-  }, []);
-
-  const handleConnect = useCallback(async () => {
-    if (sessionRef.current || busy) return;
-    if (!audioRef.current) return;
-    setBusy(true);
-    setError(null);
-    setTurns([]);
-    try {
-      const adapter = createRealtimeAdapter();
-      const session = await adapter.connect({
-        fetchEphemeralToken,
-        audioElement: audioRef.current,
-        onEvent: (event) => {
-          if (event.type === "state") setState(event.state);
-          else if (event.type === "transcript") upsertTurn(event.turn);
-          else if (event.type === "error") setError(event.error);
-        },
-      });
-      sessionRef.current = session;
-      setMicEnabled(true);
-    } catch (err) {
-      sessionRef.current = null;
-      setError((prev) =>
-        prev ?? {
-          code: "connection_failed",
-          message: err instanceof Error ? err.message : "Connect failed",
-        },
-      );
-    } finally {
-      setBusy(false);
-    }
-  }, [busy, upsertTurn]);
-
-  const handleDisconnect = useCallback(async () => {
-    const session = sessionRef.current;
-    if (!session) return;
-    setBusy(true);
-    try {
-      await session.disconnect();
-    } finally {
-      sessionRef.current = null;
-      setBusy(false);
-    }
-  }, []);
-
-  const handleToggleMic = useCallback(() => {
-    const session = sessionRef.current;
-    if (!session) return;
-    const next = !micEnabled;
-    session.setMicEnabled(next);
-    setMicEnabled(next);
-  }, [micEnabled]);
-
-  useEffect(() => {
-    return () => {
-      sessionRef.current?.disconnect();
-      sessionRef.current = null;
-    };
-  }, []);
-
-  const connected = state === "listening" || state === "speaking";
-  const disconnectDisabled =
-    busy || (!connected && state !== "connecting" && state !== "error");
+  const {
+    state,
+    turns,
+    error,
+    micEnabled,
+    busy,
+    connected,
+    connectDisabled,
+    disconnectDisabled,
+    audioRef,
+    connect,
+    disconnect,
+    toggleMic,
+  } = useRealtimeSession();
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-6 py-12">
@@ -150,15 +50,15 @@ export default function RealtimeDevPage() {
       <section className="flex flex-wrap gap-2">
         <button
           type="button"
-          onClick={handleConnect}
-          disabled={busy || connected || state === "connecting"}
+          onClick={connect}
+          disabled={connectDisabled}
           className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-50"
         >
           Connect
         </button>
         <button
           type="button"
-          onClick={handleDisconnect}
+          onClick={disconnect}
           disabled={disconnectDisabled}
           className="rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium disabled:opacity-50"
         >
@@ -166,7 +66,7 @@ export default function RealtimeDevPage() {
         </button>
         <button
           type="button"
-          onClick={handleToggleMic}
+          onClick={toggleMic}
           disabled={!connected}
           className="rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium disabled:opacity-50"
         >
