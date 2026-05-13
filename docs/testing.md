@@ -22,12 +22,6 @@ Phase 1 (MVP) 中、テスト基盤は smoke 中心の最小構成。
 | API route | MSW (Phase 2) | 現状は対象なし |
 | WebRTC | テストしない | ブラウザ / 実マイク依存。Playwright + 手動 smoke でカバー |
 
-## `fetchEphemeralToken` と adapter 層 — テスト時の挙動
-
-`useRealtimeSession` は `fetchEphemeralToken` を adapter に props として渡しているだけで、自身では呼び出さない。実際の `fetch("/api/session")` は adapter の内側で実行される。
-
-そのため adapter モックを差し替えれば、`fetchEphemeralToken` も `fetch` も発火せず、テストは副作用なしで完結する。`vi.spyOn(global, "fetch")` で global を汚す方式は採らない。
-
 ## What we do NOT test
 
 - `RTCPeerConnection` / `getUserMedia` の挙動(永続的にやらない方針)
