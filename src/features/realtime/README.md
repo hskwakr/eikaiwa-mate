@@ -24,7 +24,7 @@ UI からは「会話セッションの開始・停止・マイク切替・字�
 ## 使い方(将来の利用イメージ — 実装は Sprint 2 [7][8])
 
 ```ts
-import { createRealtimeAdapter } from '@/lib/realtime';
+import { createRealtimeAdapter } from '@/features/realtime';
 
 const adapter = createRealtimeAdapter();
 const session = await adapter.connect({
@@ -49,5 +49,9 @@ await session.disconnect();
 
 - `types.ts` — 公開型。実装はここを import する
 - `adapter.ts` — `createRealtimeAdapter()` の factory 入口(MVP は OpenAI 固定)
-- `createOpenAIRealtimeAdapter.ts` — OpenAI Realtime API 実装(Sprint 2 [7][8] で中身を埋める)
-- `index.ts` — barrel
+- `createOpenAIRealtimeAdapter.ts` — OpenAI Realtime API 実装
+- `hooks/` — React 利用面(`useRealtimeSession`、`useEphemeralToken`)
+- `server/` — Server-only helper(`issueOpenAIClientSecret`、API route から使用)
+- `index.ts` — クライアント向け barrel(`server/` は経由しない)
+
+配置ルール全般は [`docs/code-organization.md`](../../../docs/code-organization.md) を参照。

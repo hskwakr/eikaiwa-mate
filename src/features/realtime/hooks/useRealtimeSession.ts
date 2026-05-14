@@ -1,34 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createRealtimeAdapter } from "./adapter";
+import { createRealtimeAdapter } from "../adapter";
 import type {
   RealtimeAdapter,
   RealtimeError,
   RealtimeSession,
   SessionState,
   TranscriptTurn,
-} from "./types";
-
-interface SessionTokenResponse {
-  value: string;
-  expiresAt: number;
-}
-
-async function fetchEphemeralToken(): Promise<string> {
-  const res = await fetch("/api/session", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  });
-  if (!res.ok) {
-    throw new Error(`/api/session failed: ${res.status} ${res.statusText}`);
-  }
-  const body = (await res.json()) as Partial<SessionTokenResponse>;
-  if (typeof body.value !== "string") {
-    throw new Error("/api/session response missing 'value'");
-  }
-  return body.value;
-}
+} from "../types";
+import { useEphemeralToken } from "./useEphemeralToken";
 
 export interface UseRealtimeSessionOptions {
   adapter?: RealtimeAdapter;
@@ -53,6 +34,7 @@ export function useRealtimeSession(
   options: UseRealtimeSessionOptions = {},
 ): UseRealtimeSessionResult {
   const { adapter: injectedAdapter } = options;
+  const { fetch: fetchEphemeralToken } = useEphemeralToken();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const sessionRef = useRef<RealtimeSession | null>(null);
   const [state, setState] = useState<SessionState>("idle");
@@ -101,7 +83,7 @@ export function useRealtimeSession(
     } finally {
       setBusy(false);
     }
-  }, [busy, injectedAdapter, upsertTurn]);
+  }, [busy, injectedAdapter, upsertTurn, fetchEphemeralToken]);
 
   const disconnect = useCallback(async () => {
     const session = sessionRef.current;

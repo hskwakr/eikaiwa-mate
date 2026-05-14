@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { SessionState } from "@/lib/realtime";
+import type { SessionState } from "@/features/realtime";
 
 export const STATE_LABEL: Record<SessionState, string> = {
   idle: "Idle",

@@ -1,10 +1,12 @@
 export { createRealtimeAdapter } from './adapter';
 export { createOpenAIRealtimeAdapter } from './createOpenAIRealtimeAdapter';
-export { useRealtimeSession } from './useRealtimeSession';
+export { useRealtimeSession } from './hooks/useRealtimeSession';
 export type {
   UseRealtimeSessionOptions,
   UseRealtimeSessionResult,
-} from './useRealtimeSession';
+} from './hooks/useRealtimeSession';
+export { useEphemeralToken } from './hooks/useEphemeralToken';
+export type { UseEphemeralTokenResult } from './hooks/useEphemeralToken';
 export type {
   ConnectOptions,
   RealtimeAdapter,

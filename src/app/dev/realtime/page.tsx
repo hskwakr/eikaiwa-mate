@@ -1,6 +1,6 @@
 "use client";
 
-import { useRealtimeSession } from "@/lib/realtime";
+import { useRealtimeSession } from "@/features/realtime";
 import { STATE_LABEL } from "@/components/state-badge/StateBadge";
 
 export default function RealtimeDevPage() {
