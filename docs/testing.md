@@ -26,7 +26,12 @@ Phase 1 (MVP) 中、テスト基盤は smoke 中心の最小構成。
 
 - `RTCPeerConnection` / `getUserMedia` の挙動(永続的にやらない方針)
 - 実 API への E2E(Phase 後半 / デプロイ前)
-- `fetch("/api/session")` を `vi.spyOn(global, "fetch")` で叩く方式(global 副作用が漏れてテスト分離が緩むため)
+- `useRealtimeSession` テストから global `fetch` を直接叩く方式 — adapter 層 DI モックが副作用境界として既に存在するため、`fetch` の差し替えは `useEphemeralToken` 単体テストに閉じる
+
+## fetch を扱うテスト
+
+- `useEphemeralToken` 単体テストは `vi.stubGlobal("fetch", mock)` + `afterEach(() => vi.unstubAllGlobals())` で per-test 分離する(global 副作用が次テストに漏れない)
+- 同 hook 以外で `fetch` をモックする必要が出たら、それは新しい service hook に切り出すサイン
 
 ## Coverage policy
 
