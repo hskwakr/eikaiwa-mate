@@ -45,7 +45,11 @@ merge 前は両方 green を前提とする。
 
 ## Realtime adapter 契約
 
-OpenAI Realtime API は薄い adapter 越しに呼ぶ(将来差し替えの可能性あり)。公開型と設計判断 6 箇条は `src/lib/realtime/README.md` を参照。adapter 内部実装は Sprint 2 で進める。
+OpenAI Realtime API は薄い adapter 越しに呼ぶ(将来差し替えの可能性あり)。公開型と設計判断 6 箇条は `src/features/realtime/README.md` を参照。adapter 内部実装は Sprint 2 で進める。
+
+## コード配置・hooks 化判断基準
+
+`docs/code-organization.md` に集約:`src/features/<feature>/` umbrella、境界フォルダルール(`hooks/` / `actions/` / `server/` は常に sub-folder)、route 固有 colocation(`_components/` / `_hooks/` / `_actions/`)、hook 化判断基準 4 種別表、命名規約。
 
 ## 並列開発
 

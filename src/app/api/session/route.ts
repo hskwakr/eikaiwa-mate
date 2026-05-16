@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { issueOpenAIClientSecret } from "@/lib/realtime/server";
+import { issueOpenAIClientSecret } from "@/features/realtime/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

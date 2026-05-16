@@ -1,6 +1,6 @@
 "use client";
 
-import { useRealtimeSession } from "@/lib/realtime";
+import { useRealtimeSession } from "@/features/realtime";
 import { SubtitleList } from "@/components/subtitles/SubtitleList";
 import { StateBadge } from "@/components/state-badge/StateBadge";
 import { SessionControl } from "@/app/_components/SessionControl";

@@ -36,9 +36,9 @@ Phase 1 (MVP) 中、テスト基盤は smoke 中心の最小構成。
 ## File layout
 
 - テストファイルは同居(`Foo.test.tsx` を `Foo.tsx` と並べる) — by-feature コロケーションと整合
-- Mock adapter: `src/lib/realtime/__mocks__/adapter.ts`(vitest `__mocks__/` 規約)
+- Mock adapter: `src/features/realtime/__mocks__/adapter.ts`(vitest `__mocks__/` 規約)
 
 ## 関連
 
-- 命名規約 / API 連携 hooks 化判断基準 / page 専用 `_hooks/` 規約は別タスクで検討中。本ドキュメントはテスト方針に閉じる
-- adapter 契約: [`src/lib/realtime/README.md`](../src/lib/realtime/README.md)
+- 命名規約 / hooks 化判断基準 / `_hooks/` 規約 / `src/features/` 配置ルール: [`code-organization.md`](code-organization.md)
+- adapter 契約: [`src/features/realtime/README.md`](../src/features/realtime/README.md)

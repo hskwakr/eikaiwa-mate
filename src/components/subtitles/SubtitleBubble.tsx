@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { TranscriptTurn } from "@/lib/realtime";
+import type { TranscriptTurn } from "@/features/realtime";
 
 interface SubtitleBubbleProps {
   turn: TranscriptTurn;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import type { SessionState } from "@/lib/realtime";
+import type { SessionState } from "@/features/realtime";
 
 interface SessionControlProps {
   state: SessionState;
