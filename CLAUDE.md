@@ -42,6 +42,7 @@ merge 前は両方 green を前提とする。
 
 - 型チェック: `pnpm tsc --noEmit`
 - ビルド: `pnpm build`
+- テスト: `pnpm test`
 
 ## Realtime adapter 契約
 
