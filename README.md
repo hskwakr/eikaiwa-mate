@@ -42,7 +42,7 @@ pnpm test:watch       # vitest watch モード
 詳細は以下を参照:
 
 - コード配置・hook 化判断基準: [`docs/code-organization.md`](docs/code-organization.md)
-- テスト方針: [`docs/testing.md`](docs/testing.md)
+- テスト方針: [`docs/testing/`](docs/testing/README.md)
 - Realtime adapter 契約: [`src/features/realtime/README.md`](src/features/realtime/README.md)
 
 ## License
