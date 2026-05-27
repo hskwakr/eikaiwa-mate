@@ -6,7 +6,8 @@
 
 ## 受け入れ条件
 
-spec.md のコア要件 3 つ + plan.md Phase 1 done 条件:
+spec.md のコア要件 3 つ + plan.md Phase 1 done 条件(両者の出典は本リポジトリ管理外。
+[README.md](./README.md) の「出典について」参照):
 
 - 自分の英語発話を AI に送れる
 - AI が英語音声で返答する
