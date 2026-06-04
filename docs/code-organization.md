@@ -88,4 +88,4 @@ API 連携を hook 化するかどうかは、以下 3 軸で判断する。
 ## 参考
 
 - adapter 契約の具体例: [`src/features/realtime/README.md`](../src/features/realtime/README.md)
-- テスト方針: [`testing.md`](testing.md)
+- テスト方針: [`testing/`](testing/README.md)
